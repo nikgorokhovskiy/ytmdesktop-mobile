@@ -1,0 +1,74 @@
+-- Tracks table: caches track metadata and offline state
+CREATE TABLE IF NOT EXISTS TrackEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    artist TEXT NOT NULL,
+    album TEXT,
+    duration INTEGER NOT NULL DEFAULT 0,
+    thumbnailUrl TEXT,
+    streamUrl TEXT,
+    localPath TEXT,
+    isDownloaded INTEGER NOT NULL DEFAULT 0,
+    createdAt INTEGER NOT NULL DEFAULT 0
+);
+
+-- Playlists table: caches playlist metadata
+CREATE TABLE IF NOT EXISTS PlaylistEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    thumbnailUrl TEXT,
+    trackCount INTEGER NOT NULL DEFAULT 0
+);
+
+-- Playlist-Track junction table
+CREATE TABLE IF NOT EXISTS PlaylistTrack (
+    playlistId TEXT NOT NULL,
+    trackId TEXT NOT NULL,
+    position INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (playlistId, trackId),
+    FOREIGN KEY (playlistId) REFERENCES PlaylistEntity(id) ON DELETE CASCADE,
+    FOREIGN KEY (trackId) REFERENCES TrackEntity(id) ON DELETE CASCADE
+);
+
+-- Track queries
+getAllTracks:
+SELECT * FROM TrackEntity;
+
+getTrackById:
+SELECT * FROM TrackEntity WHERE id = ?;
+
+insertTrack:
+INSERT OR REPLACE INTO TrackEntity(id, title, artist, album, duration, thumbnailUrl, streamUrl, localPath, isDownloaded, createdAt)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+deleteTrack:
+DELETE FROM TrackEntity WHERE id = ?;
+
+deleteAllTracks:
+DELETE FROM TrackEntity;
+
+getDownloadedTracks:
+SELECT * FROM TrackEntity WHERE isDownloaded = 1;
+
+markTrackDownloaded:
+UPDATE TrackEntity SET isDownloaded = 1, localPath = ? WHERE id = ?;
+
+removeTrackDownloaded:
+UPDATE TrackEntity SET isDownloaded = 0, localPath = NULL WHERE id = ?;
+
+-- Playlist queries
+getAllPlaylists:
+SELECT * FROM PlaylistEntity;
+
+getPlaylistById:
+SELECT * FROM PlaylistEntity WHERE id = ?;
+
+insertPlaylist:
+INSERT OR REPLACE INTO PlaylistEntity(id, title, thumbnailUrl, trackCount)
+VALUES (?, ?, ?, ?);
+
+deletePlaylist:
+DELETE FROM PlaylistEntity WHERE id = ?;
+
+deleteAllPlaylists:
+DELETE FROM PlaylistEntity;

@@ -105,3 +105,36 @@ scripts/CONTRIBUTORS.md
 
 # JetBrains IDE (could be more specific, but it's no issues at all, to just ignore the entire folder)
 .idea
+
+# ===== Mobile (KMM) =====
+
+# Gradle
+mobile/.gradle/
+mobile/build/
+mobile/*/build/
+mobile/local.properties
+
+# Gradle wrapper JAR (regenerate with `gradle wrapper`)
+mobile/gradle/wrapper/gradle-wrapper.jar
+
+# Android
+mobile/androidApp/release/
+*.apk
+*.aab
+*.jks
+*.keystore
+
+# iOS
+mobile/iosApp/iosApp.xcodeproj/xcuserdata/
+mobile/iosApp/iosApp.xcodeproj/project.xcworkspace/xcuserdata/
+mobile/iosApp/iosApp.xcworkspace/xcuserdata/
+mobile/iosApp/Pods/
+mobile/iosApp/Podfile.lock
+mobile/iosApp/.build/
+*.xcuserstate
+
+# KMP
+mobile/shared/shared.podspec
+
+# Kotlin
+*.kotlin_module
